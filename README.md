@@ -10,6 +10,10 @@ This project is the successor to **SDI2OMD-CONVERTER**. The Windows Forms interf
 
 [**Download / Releases**](https://github.com/peteraellig/sdi_converter/releases) · [**Report an issue**](https://github.com/peteraellig/sdi_converter/issues)
 
+![SDI Converter screenshot 1](images/sc1.PNG)
+
+![SDI Converter screenshot 2](images/sc2.PNG)
+
 ## Features
 
 | Area | Capabilities |
