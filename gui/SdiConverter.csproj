@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>SdiConverter</AssemblyName>
+    <RootNamespace>SdiConverter</RootNamespace>
+    <Title>SDI Converter</Title>
+    <Product>SDI Converter</Product>
+    <Description>Blackmagic SDI to OMT / NDI and OMT to SDI</Description>
+    <Authors>Peter Aellig</Authors>
+    <Company>Peter Aellig</Company>
+    <Copyright>Peter Aellig</Copyright>
+    <Version>1.0.0.2</Version>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
+    <InformationalVersion>1.0.0.2</InformationalVersion>
+    <ApplicationIcon>Branding\sdi_converter.ico</ApplicationIcon>
+    <!-- The engine is built by CMake into the local build tree (not on the NAS). -->
+    <EngineDir Condition="'$(EngineDir)' == ''">$(LOCALAPPDATA)\sdi_converter\build\Release\</EngineDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(EngineDir)sdi_converter_engine.exe" Link="sdi_converter_engine.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$(EngineDir)libomt.dll" Link="libomt.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$(EngineDir)libvmx.dll" Link="libvmx.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <!-- ClickOnce needs the icon inside the project folder (a "..\images" path makes the manifest invalid); the master copy is images\sdi_converter.ico. -->
+  <Target Name="SyncBrandingIcon" BeforeTargets="PrepareForBuild">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\images\sdi_converter.ico" DestinationFiles="$(MSBuildProjectDirectory)\Branding\sdi_converter.ico" SkipUnchangedFiles="true" />
+  </Target>
+  <!-- Tells Visual Studio that MainForm is a designer form and nests its Designer file under it. -->
+  <ItemGroup>
+    <Compile Update="MainForm.cs"><SubType>Form</SubType></Compile>
+    <Compile Update="MainForm.Designer.cs"><DependentUpon>MainForm.cs</DependentUpon></Compile>
+    <Compile Update="HelpForm.cs"><SubType>Form</SubType></Compile>
+    <Compile Update="DiagnosticsForm.cs"><SubType>Form</SubType></Compile>
+    <Compile Update="DiagnosticsForm.Designer.cs"><DependentUpon>DiagnosticsForm.cs</DependentUpon></Compile>
+    <Compile Update="CardInfoForm.cs"><SubType>Form</SubType></Compile>
+    <Compile Update="CardInfoForm.Designer.cs"><DependentUpon>CardInfoForm.cs</DependentUpon></Compile>
+    <Compile Update="HelpForm.Designer.cs"><DependentUpon>HelpForm.cs</DependentUpon></Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <!-- F5 in Visual Studio always runs the current engine: configure and build it with CMake first (incremental, fast when unchanged). -->
+  <PropertyGroup>
+    <CMakeExe>$(MSBuildProgramFiles32)\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe</CMakeExe>
+    <CMakeExe Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe</CMakeExe>
+    <CMakeExe Condition="!Exists('$(CMakeExe)')">C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe</CMakeExe>
+  </PropertyGroup>
+  <Target Name="BuildEngine" BeforeTargets="BeforeBuild" Condition="'$(SkipEngineBuild)' != 'true'">
+    <Exec Command="&quot;$(CMakeExe)&quot; --preset windows-x64" WorkingDirectory="$(MSBuildProjectDirectory)\.." />
+    <Exec Command="&quot;$(CMakeExe)&quot; --build --preset release" WorkingDirectory="$(MSBuildProjectDirectory)\.." />
+  </Target>
+</Project>
+
+

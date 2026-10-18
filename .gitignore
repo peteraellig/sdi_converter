@@ -1,0 +1,13 @@
+.vs/
+**/bin/
+**/obj/
+/build/
+/out/
+/publish/
+*.user
+*.suo
+*.pfx
+*.p12
+.env
+.env.*
+CMakeUserPresets.json

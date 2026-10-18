@@ -1,0 +1,7 @@
+<Project>
+  <!-- Keep bin/obj off the NAS: build outputs live in the local build tree. -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(LOCALAPPDATA)\sdi_converter\gui-obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(LOCALAPPDATA)\sdi_converter\gui-bin\</BaseOutputPath>
+  </PropertyGroup>
+</Project>
