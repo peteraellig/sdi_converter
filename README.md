@@ -1,8 +1,10 @@
 # SDI Converter
 
-**Blackmagic SDI ↔ OMT / NDI for Windows** · by Peter Aellig
+**SDI ➔ OMT / NDI for Windows** 
+**OMT / NDI  ➔  SDI **
+**for Windows** · by Peter Aellig
 
-SDI Converter connects Blackmagic DeckLink ports to network video streams. An SDI input can be transmitted as **OMT**, **NDI**, or **OMT + NDI** simultaneously. In the opposite direction, the application receives an OMT or NDI stream and outputs video and audio through an SDI port.
+The SDI converter converts SDI signals to OMT or NDI and back again. It works with Blackmagic DeckLink cards. It works with the latest driver (16.4); older drivers may not work.
 
 This project is the successor to **SDI2OMD-CONVERTER**. The Windows Forms interface controls a shared C++ engine. Both directions can run simultaneously using separate, available SDI ports.
 
@@ -29,7 +31,7 @@ To run the application:
 
 - **Windows x64**.
 - A Blackmagic DeckLink card with a suitable SDI input or output.
-- The **Blackmagic Desktop Video** driver installed.
+- The **Blackmagic Desktop Video 16.4** driver installed.
 - For NDI: the NDI runtime installed with **[NDI Tools](https://ndi.video/tools/)**. It is not included in this project package.
 - A network connection between sender and receiver.
 
@@ -42,8 +44,6 @@ The bundled OMT SDK is located in `third_party/omt`. The ClickOnce configuration
 3. Install Blackmagic Desktop Video and, if needed, NDI Tools.
 4. Run `setup.exe` from the extracted package and follow the installation steps.
 5. Start SDI Converter and select the desired SDI port.
-
-**About release 1.0.0.2:** The ZIP was taken from the existing local publishing folder. It was not rebuilt or tested with SDI hardware for the GitHub upload.
 
 ## Using SDI → OMT / NDI
 
@@ -96,7 +96,7 @@ Network audio uses **stereo, 48 kHz**. Unused SDI output channels remain silent.
 
 | Symptom | What to check |
 | --- | --- |
-| No SDI device found | Check the Desktop Video driver and card installation; reload the device list with Refresh |
+| No SDI device found | Check for the latest Desktop Video driver 16.4 and card installation; reload the device list with Refresh |
 | Port shown as `(busy)` | Check whether another application, such as vMix, is using the port |
 | No SDI input signal | Check cabling, the signal source, and the detected input information |
 | No network source found | Select the correct source type; check the source, network connection, and firewall permissions |
@@ -107,81 +107,6 @@ Network audio uses **stereo, 48 kHz**. Unused SDI output channels remain silent.
 The diagnostics windows display engine logs. Status and format indicators, together with counters, help identify signal loss, format changes, dropped frames, and buffer conditions.
 
 Settings are saved per Windows user in `%APPDATA%\SDI Converter\settings.json`.
-
-## Building from source
-
-### Development environment
-
-- Visual Studio **2026**, including Desktop development with C++, MSVC x64, ATL, and .NET desktop development.
-- **.NET 8 SDK** for the Windows Forms interface.
-- **CMake 3.24 or later**.
-- Blackmagic Desktop Video on the build machine: DeckLink COM definitions are generated from the installed API.
-
-The included CMake preset uses the `Visual Studio 18 2026` generator and the `x64` architecture.
-
-### Visual Studio
-
-Open `SdiConverter.sln` and build the GUI project in the **Release** configuration. The GUI project automatically configures and builds the C++ engine with CMake.
-
-### Building the engine separately
-
-Run these commands in the project folder:
-
-```powershell
-cmake --preset windows-x64
-cmake --build --preset release
-```
-
-The engine and its OMT DLLs are then located in:
-
-```text
-%LOCALAPPDATA%\sdi_converter\build\Release\
-```
-
-The GUI uses separate build directories under `%LOCALAPPDATA%\sdi_converter\gui-bin` and `gui-obj`.
-
-### Creating a ClickOnce package
-
-```powershell
-.\scripts\publish-clickonce.ps1
-```
-
-The script uses the full **Visual Studio MSBuild**, because the required ClickOnce tasks are not available through `dotnet publish`. It creates the package and copies it to the local `publish` folder.
-
-The `publish` folder, intermediate build files, and personal Visual Studio settings are excluded from Git. Installation packages are provided through GitHub Releases.
-
-## Engine command line
-
-The interface starts `sdi_converter_engine.exe` as a separate process for each direction. The engine can also be used directly for diagnostics:
-
-```powershell
-# List devices and their status as JSON
-.\sdi_converter_engine.exe --list
-
-# Show supported modes for device index 0
-.\sdi_converter_engine.exe --modes 0
-
-# Discover OMT sources
-.\sdi_converter_engine.exe --sources
-
-# Discover NDI sources
-.\sdi_converter_engine.exe --ndi-sources
-```
-
-Additional engine commands include `--capture`, `--play`, `--test-source`, `--probe`, and `--ndi-probe`. Their arguments are defined in the entry point in `src/main.cpp`.
-
-## Project structure
-
-| Path | Contents |
-| --- | --- |
-| `gui/` | C# Windows Forms interface, settings, and process management |
-| `src/main.cpp` | Shared engine entry point and device queries |
-| `src/capture.h` | SDI input and capture processing |
-| `src/playout.h` | Network reception and scheduled SDI output |
-| `src/sinks.h`, `src/ndi_runtime.h` | Network output and NDI integration |
-| `third_party/omt/` | Bundled OMT SDK and license |
-| `images/` | Logos and icons |
-| `scripts/` | ClickOnce publishing |
 
 ## Limitations and testing status
 
