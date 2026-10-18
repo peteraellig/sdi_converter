@@ -1,7 +1,7 @@
 # SDI Converter
 
-## SDI ➔ OMT / NDI for Windows  
-## OMT / NDI  ➔  SDI  
+## SDI ➔ OMT/NDI  
+## OMT/NDI  ➔  SDI  
 **for Windows · by Peter Aellig**
 
 The SDI converter converts SDI signals to OMT or NDI and back again. It works with Blackmagic DeckLink cards. It works with the latest driver (16.4); older drivers may not work.
