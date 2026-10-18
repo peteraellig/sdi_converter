@@ -1,201 +1,201 @@
 # SDI Converter
 
-**Blackmagic SDI ↔ OMT / NDI für Windows** · von Peter Aellig
+**Blackmagic SDI ↔ OMT / NDI for Windows** · by Peter Aellig
 
-SDI Converter verbindet Blackmagic-DeckLink-Anschlüsse mit Video-Streams im Netzwerk: Ein SDI-Eingang kann als **OMT**, **NDI** oder gleichzeitig als **OMT + NDI** gesendet werden. In der Gegenrichtung empfängt die Anwendung einen OMT- oder NDI-Stream und gibt Bild und Ton über einen SDI-Ausgang aus.
+SDI Converter connects Blackmagic DeckLink ports to network video streams. An SDI input can be transmitted as **OMT**, **NDI**, or **OMT + NDI** simultaneously. In the opposite direction, the application receives an OMT or NDI stream and outputs video and audio through an SDI port.
 
-Das Projekt ist der Nachfolger von **SDI2OMD-CONVERTER**. Die Windows-Forms-Oberfläche steuert eine gemeinsame C++-Engine. Beide Richtungen können gleichzeitig auf getrennten, verfügbaren SDI-Anschlüssen laufen.
+This project is the successor to **SDI2OMD-CONVERTER**. The Windows Forms interface controls a shared C++ engine. Both directions can run simultaneously using separate, available SDI ports.
 
-[**Download / Releases**](https://github.com/peteraellig/sdi_converter/releases) · [**Fehler melden**](https://github.com/peteraellig/sdi_converter/issues)
+[**Download / Releases**](https://github.com/peteraellig/sdi_converter/releases) · [**Report an issue**](https://github.com/peteraellig/sdi_converter/issues)
 
-## Funktionen
+## Features
 
-| Bereich | Möglichkeiten |
+| Area | Capabilities |
 | --- | --- |
-| SDI → Netzwerk | OMT, NDI oder OMT + NDI gleichzeitig |
-| Netzwerk → SDI | OMT- oder NDI-Quelle auswählen und auf SDI ausgeben |
-| Videoformat | Automatische Erkennung von Auflösung, Bildrate und Progressive/Interlaced |
-| Formatwechsel | Capture bzw. Wiedergabe startet automatisch im neuen passenden Format |
-| OMT-Qualität | Low, Normal oder High; unabhängig von NDI |
-| Audio | Auswahl eines Stereo-Paars, eines Mono-Kanals oder Audio aus |
-| Quellensuche | OMT-Sender und NDI-Quellen im Netzwerk suchen |
-| Wiedergabepuffer | 3 bis 8 Frames einstellbar |
-| Diagnose | Gerätestatus, erkannter Modus, Zähler, Logs und Systemlast |
-| Einstellungen | Lokale Speicherung der zuletzt gewählten Einstellungen |
+| SDI → Network | OMT, NDI, or OMT + NDI simultaneously |
+| Network → SDI | Select an OMT or NDI source and output it over SDI |
+| Video format | Automatic detection of resolution, frame rate, and progressive/interlaced video |
+| Format changes | Capture or playback automatically restarts with the matching new format |
+| OMT quality | Low, Normal, or High; independent of NDI |
+| Audio | Select a stereo pair, a mono channel, or disable audio |
+| Source discovery | Find OMT senders and NDI sources on the network |
+| Playback buffer | Adjustable from 3 to 8 frames |
+| Diagnostics | Device status, detected mode, counters, logs, and system load |
+| Settings | Locally saved preferences |
 
-## Voraussetzungen
+## Requirements
 
-Für den Betrieb:
+To run the application:
 
 - **Windows x64**.
-- Eine Blackmagic-DeckLink-Karte mit geeignetem SDI-Ein- bzw. -Ausgang.
-- Installierter **Blackmagic Desktop Video**-Treiber.
-- Für NDI: die mit **[NDI Tools](https://ndi.video/tools/)** installierte NDI-Runtime. Diese gehört nicht zum Projektpaket.
-- Eine Netzwerkverbindung zwischen Sender und Empfänger.
+- A Blackmagic DeckLink card with a suitable SDI input or output.
+- The **Blackmagic Desktop Video** driver installed.
+- For NDI: the NDI runtime installed with **[NDI Tools](https://ndi.video/tools/)**. It is not included in this project package.
+- A network connection between sender and receiver.
 
-Das mitgelieferte OMT-SDK liegt unter `third_party/omt`. Die ClickOnce-Konfiguration ist für eine eigenständige .NET-Veröffentlichung ausgelegt und enthält eine Voraussetzung für die Visual-C++-Runtime x64. Für die Entwicklung werden zusätzlich Visual Studio und CMake benötigt; siehe unten.
+The bundled OMT SDK is located in `third_party/omt`. The ClickOnce configuration targets a self-contained .NET deployment and includes a prerequisite for the Visual C++ x64 runtime. Development also requires Visual Studio and CMake; see below.
 
 ## Installation
 
-1. Unter [Releases](https://github.com/peteraellig/sdi_converter/releases) das gewünschte Installations-ZIP herunterladen.
-2. Das vollständige ZIP in einen lokalen Ordner entpacken. Die Ordnerstruktur einschließlich `Application Files` beibehalten.
-3. Blackmagic Desktop Video und bei Bedarf NDI Tools installieren.
-4. `setup.exe` aus dem entpackten Paket starten und den Installationsschritten folgen.
-5. SDI Converter starten und den gewünschten SDI-Anschluss auswählen.
+1. Download the desired installation ZIP from [Releases](https://github.com/peteraellig/sdi_converter/releases).
+2. Extract the entire ZIP to a local folder. Keep the directory structure, including `Application Files`, intact.
+3. Install Blackmagic Desktop Video and, if needed, NDI Tools.
+4. Run `setup.exe` from the extracted package and follow the installation steps.
+5. Start SDI Converter and select the desired SDI port.
 
-**Zum bereitgestellten Release 1.0.0.2:** Das ZIP wurde aus dem vorhandenen lokalen Veröffentlichungsordner übernommen. Es wurde für den GitHub-Upload nicht neu erstellt oder mit SDI-Hardware getestet.
+**About release 1.0.0.2:** The ZIP was taken from the existing local publishing folder. It was not rebuilt or tested with SDI hardware for the GitHub upload.
 
-## Bedienung: SDI → OMT / NDI
+## Using SDI → OMT / NDI
 
-1. Im Capture-Reiter unter **SDI input** den Eingang auswählen. **Refresh** liest die Geräteliste erneut ein.
-2. Unter **Sender name** einen Namen vergeben. Im Netzwerk erscheint der Sender als `HOST (Name)`.
-3. Unter **Send as** zwischen **OMT**, **NDI** und **OMT + NDI** wählen.
-4. Bei OMT die gewünschte **OMT quality** einstellen.
-5. Die eingebetteten SDI-Audiokanäle unter **Audio** auswählen.
-6. Unter **If name exists** festlegen, wie mit einem bereits vorhandenen OMT-Sendernamen umgegangen wird.
-7. Mit **Start** die Übertragung beginnen und Status, Format sowie Zähler prüfen. Mit **Stop** beenden.
+1. In the capture tab, select the input under **SDI input**. **Refresh** reloads the device list.
+2. Enter a **Sender name**. The sender appears on the network as `HOST (Name)`.
+3. Under **Send as**, choose **OMT**, **NDI**, or **OMT + NDI**.
+4. For OMT, select the desired **OMT quality**.
+5. Select the embedded SDI audio channels under **Audio**.
+6. Under **If name exists**, choose how to handle an OMT sender name that is already in use.
+7. Click **Start** to begin transmission and check the status, format, and counters. Click **Stop** to finish.
 
-Ein Videoformat muss nicht manuell gewählt werden: Die Karte meldet Auflösung, Bildrate und Halbbildverfahren. Bei einem Wechsel des Eingangssignals folgt die Anwendung dem neuen Format automatisch.
+You do not need to select a video format manually: the card reports the resolution, frame rate, and field order. If the input signal changes format, the application follows the new format automatically.
 
-Für doppelte OMT-Sendernamen stehen Abbruch, automatische Nummerierung, Warten bis der Name frei wird sowie Warten mit einem Limit von zehn Minuten zur Verfügung.
+Options for duplicate OMT sender names include aborting, adding a number automatically, waiting until the name becomes available, or waiting for up to ten minutes.
 
-## Bedienung: OMT / NDI → SDI
+## Using OMT / NDI → SDI
 
-1. Im Wiedergabe-Reiter unter **SDI output** den Ausgang auswählen.
-2. Unter **Source type** **OMT** oder **NDI** einstellen.
-3. Mit **Find senders** nach Quellen suchen oder den Sendernamen direkt eingeben.
-4. Unter **Buffer (frames)** einen Puffer zwischen **3 und 8 Frames** wählen. Ein größerer Puffer erhöht die Verzögerung und bietet mehr Reserve bei schwankender Anlieferung.
-5. Unter **SDI audio** das gewünschte Ausgangskanalpaar bzw. den Mono-Kanal wählen.
-6. Mit **Start** die Ausgabe starten. Mit **Stop** beenden.
+1. In the playback tab, select the output under **SDI output**.
+2. Set **Source type** to **OMT** or **NDI**.
+3. Click **Find senders** to discover sources, or enter the sender name directly.
+4. Under **Buffer (frames)**, choose a buffer between **3 and 8 frames**. A larger buffer adds delay and provides more tolerance for irregular frame delivery.
+5. Under **SDI audio**, select the desired output channel pair or mono channel.
+6. Click **Start** to begin output. Click **Stop** to finish.
 
-Das erste empfangene Bild bestimmt den SDI-Ausgabemodus. Die Karte muss einen passenden Modus für Auflösung, exakte Bildrate und Progressive/Interlaced unterstützen. Bei einem Formatwechsel startet die Ausgabe im passenden Modus neu.
+The first received frame determines the SDI output mode. The card must support a matching mode for the resolution, exact frame rate, and progressive/interlaced format. If the source changes format, output restarts in the matching mode.
 
-**Es gibt keine Skalierung und keine Bildratenkonvertierung.** Fehlt ein passender Kartenmodus, wird ein Fehler angezeigt. Bleibt das Videosignal ungefähr eine halbe Sekunde aus, schaltet die Ausgabe auf Schwarzbild und Stille.
+**There is no scaling or frame rate conversion.** If no matching card mode is available, an error is displayed. If no video arrives for approximately half a second, output switches to black and silence.
 
-## Audio-Routing
+## Audio routing
 
-| Auswahl | SDI → Netzwerk | Netzwerk → SDI |
+| Selection | SDI → Network | Network → SDI |
 | --- | --- | --- |
-| Stereo 1&2 / 3&4 / 5&6 / 7&8 | Gewähltes SDI-Paar als Netzwerk-Stereo senden | Netzwerk-Stereo auf das gewählte SDI-Paar ausgeben |
-| Mono 1 bis 8 | Gewählten SDI-Kanal auf beide Netzwerkkanäle legen | Linken und rechten Netzwerkkanal auf den gewählten SDI-Kanal mischen |
-| Off | Ohne Audio senden | Stille ausgeben |
+| Stereo 1&2 / 3&4 / 5&6 / 7&8 | Send the selected SDI pair as network stereo | Output network stereo on the selected SDI pair |
+| Mono 1 to 8 | Send the selected SDI channel on both network channels | Mix the left and right network channels onto the selected SDI channel |
+| Off | Transmit without audio | Output silence |
 
-Netzwerk-Audio arbeitet mit **Stereo, 48 kHz**. Nicht verwendete SDI-Ausgangskanäle bleiben stumm. Die NDI-Pegelreferenz wird beim Senden und Empfangen entsprechend umgesetzt.
+Network audio uses **stereo, 48 kHz**. Unused SDI output channels remain silent. The NDI reference level is converted appropriately when sending and receiving.
 
-## Video und Latenz
+## Video and latency
 
-- Videoverarbeitung als **8-Bit YUV 4:2:2 (UYVY)**.
-- Unterstützung der vom Gerät bzw. Stream gemeldeten Bildraten einschließlich 23,98 / 29,97 / 59,94.
-- Interlaced-Material bleibt als Halbbildmaterial erhalten. Beispiel: 1080i50 entspricht 25 vollständigen Bildern pro Sekunde mit Interlaced-Kennzeichnung.
-- NDI-Halbbilder werden für die SDI-Wiedergabe zu vollständigen Bildern zusammengesetzt.
-- Beim Capture wartet nur das neueste Bild auf die Codierung. Ist der Encoder zu langsam, wird das ältere wartende Bild verworfen und gezählt.
-- Die Wiedergabe wird durch den Takt der SDI-Karte gesteuert. Fehlende Bilder werden zunächst wiederholt.
-- Der eingestellte Wiedergabepuffer ist nur ein Teil der gesamten Verzögerung; Karte, Encoder, Netzwerk und Empfänger tragen ebenfalls dazu bei.
+- Video processing uses **8-bit YUV 4:2:2 (UYVY)**.
+- Frame rates reported by the device or stream are supported, including 23.98 / 29.97 / 59.94.
+- Interlaced material retains both fields. For example, 1080i50 is represented as 25 full-height frames per second, flagged as interlaced.
+- NDI fields are woven into complete frames for SDI playback.
+- During capture, only the newest frame waits for encoding. If the encoder is too slow, the older waiting frame is discarded and counted.
+- Playback follows the SDI card's clock. Missing frames are initially repeated.
+- The configured playback buffer is only part of the overall delay; the card, encoder, network, and receiver also contribute.
 
-## Status, Logs und Fehlersuche
+## Status, logs, and troubleshooting
 
-| Beobachtung | Prüfen |
+| Symptom | What to check |
 | --- | --- |
-| Kein SDI-Gerät gefunden | Desktop-Video-Treiber, Karteninstallation und Geräteliste mit Refresh prüfen |
-| Anschluss als `(busy)` angezeigt | Prüfen, ob eine andere Anwendung, etwa vMix, den Port verwendet |
-| Kein SDI-Eingangssignal | Verkabelung, Signalquelle und erkannte Eingangsdaten kontrollieren |
-| Keine Netzwerkquelle gefunden | Richtigen Quelltyp wählen; Quelle, Netzwerkverbindung und Firewall-Freigaben prüfen |
-| NDI-Runtime fehlt | NDI Tools installieren und die Anwendung erneut starten |
-| Kein passender SDI-Ausgabemodus | Quellformat mit den unterstützten Kartenmodi vergleichen; es findet keine Formatkonvertierung statt |
-| Viele verlorene oder wiederholte Bilder | Logs und Systemlast prüfen; bei Wiedergabe gegebenenfalls den Puffer erhöhen |
+| No SDI device found | Check the Desktop Video driver and card installation; reload the device list with Refresh |
+| Port shown as `(busy)` | Check whether another application, such as vMix, is using the port |
+| No SDI input signal | Check cabling, the signal source, and the detected input information |
+| No network source found | Select the correct source type; check the source, network connection, and firewall permissions |
+| NDI runtime missing | Install NDI Tools and restart the application |
+| No matching SDI output mode | Compare the source format with the card's supported modes; no format conversion is performed |
+| Many dropped or repeated frames | Check logs and system load; consider increasing the playback buffer |
 
-Die Diagnosefenster zeigen die Engine-Logs. Status- und Formatanzeigen sowie Zähler helfen, Signalverlust, Formatwechsel, verworfene Bilder und Pufferzustände einzugrenzen.
+The diagnostics windows display engine logs. Status and format indicators, together with counters, help identify signal loss, format changes, dropped frames, and buffer conditions.
 
-Einstellungen werden pro Windows-Benutzer unter `%APPDATA%\SDI Converter\settings.json` gespeichert.
+Settings are saved per Windows user in `%APPDATA%\SDI Converter\settings.json`.
 
-## Aus dem Quellcode erstellen
+## Building from source
 
-### Entwicklungsumgebung
+### Development environment
 
-- Visual Studio **2026**, einschließlich C++-Desktopentwicklung, MSVC x64, ATL und .NET-Desktopentwicklung.
-- **.NET 8 SDK** für die Windows-Forms-Oberfläche.
-- **CMake 3.24 oder neuer**.
-- Blackmagic Desktop Video auf dem Build-Rechner: Die DeckLink-COM-Definitionen werden aus der installierten API erzeugt.
+- Visual Studio **2026**, including Desktop development with C++, MSVC x64, ATL, and .NET desktop development.
+- **.NET 8 SDK** for the Windows Forms interface.
+- **CMake 3.24 or later**.
+- Blackmagic Desktop Video on the build machine: DeckLink COM definitions are generated from the installed API.
 
-Das mitgelieferte CMake-Preset verwendet den Generator `Visual Studio 18 2026` und die Architektur `x64`.
+The included CMake preset uses the `Visual Studio 18 2026` generator and the `x64` architecture.
 
 ### Visual Studio
 
-`SdiConverter.sln` öffnen und das GUI-Projekt in der Konfiguration **Release** erstellen. Das GUI-Projekt konfiguriert und baut die C++-Engine automatisch mit CMake.
+Open `SdiConverter.sln` and build the GUI project in the **Release** configuration. The GUI project automatically configures and builds the C++ engine with CMake.
 
-### Engine separat
+### Building the engine separately
 
-Im Projektordner ausführen:
+Run these commands in the project folder:
 
 ```powershell
 cmake --preset windows-x64
 cmake --build --preset release
 ```
 
-Die Engine und ihre OMT-DLLs liegen danach unter:
+The engine and its OMT DLLs are then located in:
 
 ```text
 %LOCALAPPDATA%\sdi_converter\build\Release\
 ```
 
-Die GUI verwendet getrennte Build-Verzeichnisse unter `%LOCALAPPDATA%\sdi_converter\gui-bin` und `gui-obj`.
+The GUI uses separate build directories under `%LOCALAPPDATA%\sdi_converter\gui-bin` and `gui-obj`.
 
-### ClickOnce-Paket erstellen
+### Creating a ClickOnce package
 
 ```powershell
 .\scripts\publish-clickonce.ps1
 ```
 
-Das Skript verwendet das vollständige **Visual-Studio-MSBuild**, da die benötigten ClickOnce-Aufgaben nicht über `dotnet publish` bereitstehen. Es erstellt das Paket und kopiert es in den lokalen Ordner `publish`.
+The script uses the full **Visual Studio MSBuild**, because the required ClickOnce tasks are not available through `dotnet publish`. It creates the package and copies it to the local `publish` folder.
 
-Der Ordner `publish`, Build-Zwischendateien und persönliche Visual-Studio-Einstellungen sind von Git ausgeschlossen. Fertige Installationspakete werden unter GitHub Releases bereitgestellt.
+The `publish` folder, intermediate build files, and personal Visual Studio settings are excluded from Git. Installation packages are provided through GitHub Releases.
 
-## Engine-Kommandozeile
+## Engine command line
 
-Die Oberfläche startet `sdi_converter_engine.exe` als separaten Prozess pro Richtung. Für Diagnosezwecke kann die Engine auch direkt verwendet werden:
+The interface starts `sdi_converter_engine.exe` as a separate process for each direction. The engine can also be used directly for diagnostics:
 
 ```powershell
-# Geräte und deren Status als JSON ausgeben
+# List devices and their status as JSON
 .\sdi_converter_engine.exe --list
 
-# Unterstützte Modi für Gerät mit Index 0 anzeigen
+# Show supported modes for device index 0
 .\sdi_converter_engine.exe --modes 0
 
-# OMT-Quellen suchen
+# Discover OMT sources
 .\sdi_converter_engine.exe --sources
 
-# NDI-Quellen suchen
+# Discover NDI sources
 .\sdi_converter_engine.exe --ndi-sources
 ```
 
-Weitere Engine-Befehle sind `--capture`, `--play`, `--test-source`, `--probe` und `--ndi-probe`. Deren Argumente sind im Einstiegspunkt `src/main.cpp` definiert.
+Additional engine commands include `--capture`, `--play`, `--test-source`, `--probe`, and `--ndi-probe`. Their arguments are defined in the entry point in `src/main.cpp`.
 
-## Projektaufbau
+## Project structure
 
-| Pfad | Inhalt |
+| Path | Contents |
 | --- | --- |
-| `gui/` | C#-Windows-Forms-Oberfläche, Einstellungen und Prozesssteuerung |
-| `src/main.cpp` | Gemeinsamer Engine-Einstiegspunkt und Geräteabfragen |
-| `src/capture.h` | SDI-Eingang und Capture-Verarbeitung |
-| `src/playout.h` | Netzwerkempfang und zeitgesteuerte SDI-Ausgabe |
-| `src/sinks.h`, `src/ndi_runtime.h` | Netzwerkausgabe und NDI-Anbindung |
-| `third_party/omt/` | Mitgeliefertes OMT-SDK und Lizenz |
-| `images/` | Logos und Symbole |
-| `scripts/` | ClickOnce-Veröffentlichung |
+| `gui/` | C# Windows Forms interface, settings, and process management |
+| `src/main.cpp` | Shared engine entry point and device queries |
+| `src/capture.h` | SDI input and capture processing |
+| `src/playout.h` | Network reception and scheduled SDI output |
+| `src/sinks.h`, `src/ndi_runtime.h` | Network output and NDI integration |
+| `third_party/omt/` | Bundled OMT SDK and license |
+| `images/` | Logos and icons |
+| `scripts/` | ClickOnce publishing |
 
-## Grenzen und Teststand
+## Limitations and testing status
 
-- **4K- und SD-Formate sind laut integrierter Hilfe noch nicht getestet.**
-- NDI-Quellen mit Alphakanal werden nicht unterstützt.
-- Die tatsächlich nutzbaren SDI-Modi hängen von Karte, Port-Konfiguration und Treiber ab.
-- Das Hochladen des Projekts und der Installationsdatei ersetzt keinen Hardware- oder Funktionstest.
+- **4K and SD formats have not yet been tested, according to the built-in help.**
+- NDI sources with an alpha channel are not supported.
+- Available SDI modes depend on the card, port configuration, and driver.
+- Uploading the project and installation package does not constitute hardware or functional testing.
 
-Bei Fehlermeldungen bitte Programmversion, Kartenmodell, Desktop-Video-Version, Signalrichtung, Quellformat und relevante Log-Auszüge angeben.
+When reporting an issue, please include the application version, card model, Desktop Video version, signal direction, source format, and relevant log excerpts.
 
-## Lizenz und Fremdkomponenten
+## License and third-party components
 
-Der eigene Quellcode steht unter der **[0BSD-Lizenz](LICENSE)**.
+The project's original source code is licensed under the **[0BSD license](LICENSE)**.
 
-Das mitgelieferte Open-Media-Transport-SDK behält seine MIT-Lizenz. Blackmagic Desktop Video und die NDI-Runtime werden separat installiert. Weitere Angaben stehen in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The bundled Open Media Transport SDK retains its MIT license. Blackmagic Desktop Video and the NDI runtime are installed separately. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for details.
 
-NDI® ist eine eingetragene Marke von Vizrt NDI AB.
+NDI® is a registered trademark of Vizrt NDI AB.
