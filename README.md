@@ -1,5 +1,9 @@
 # SDI Converter
 
+> [!TIP]
+> **New multichannel version available:** [SDI Converter 2](https://github.com/peteraellig/SDI_converter2) supports multiple simultaneous streams with a separate configurable channel per available SDI port.
+> Visit the new project for details and the [ClickOnce installer](https://github.com/peteraellig/SDI_converter2#installation-clickonce).
+
 ## SDI ➔ OMT/NDI  
 ## OMT/NDI  ➔  SDI  
 **for Windows · by Peter Aellig**
